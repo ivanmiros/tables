@@ -5,36 +5,13 @@
 
 
 
-
-void delete_array(long ** &A, int size) {
-
-    // delete rows first
-    for(int i = 0; i < size; i++) {
-        delete [] A[i];
-    }
-    // delete entry points
-    delete [] A;
-
-}
-
-void init_array(long ** &A, int size) {
-    // Array of pointers - columns
-    A = new long* [size];
-    // Add arrays of rows + init to 0
-    for(int i = 0; i < size; i++) {
-        A[i] = new long[size];
-        memset(A[i], 0, sizeof(long)*size);
-    }
-}
-
-
 int main() {
-
      
     int **A;
     int start_rows;
-    
 
+
+    // 1. Init arrays
     scanf("%d", &start_rows);
     A = new int* [start_rows];
 
@@ -55,8 +32,22 @@ int main() {
         printf("\n");
     }
           
+    // 2. Main code      
     
 
 
+
+
+
+
+
+
+
+
+    // 9. Delete arrays
+    for (int i=0; i<start_rows; i++) {
+        delete [] A[i];
+    }
+    delete [] A;
 
 }
