@@ -3,9 +3,6 @@
 #include <cstdio>    // printf, getchar
 #include <cstring>   // C-style string by char type 
 
-// 2 3 1 2 3 4 9 8 7
-
-
 void init_arrays(int** &A, int* &B, int &rows) {
 
     // Get number of rows
@@ -65,7 +62,7 @@ int main() {
     print_arrays(A, B, rows);
           
     // 2. Main code      
-    remove_row(A, B, rows, 1);
+    remove_row(A, B, rows, 2);
     print_arrays(A, B, rows);
 
 
