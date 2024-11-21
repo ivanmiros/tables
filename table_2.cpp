@@ -21,7 +21,7 @@ void init_arrays(int** &A, int* &B, int &rows) {
 }
 
 void print_arrays(int** &A, int* &B, int &rows) {
-    printf("\nRows: %d\n", rows);
+    //printf("\nRows: %d\n", rows);
     for (int i=0; i<rows; i++) {
         printf("%d: ",B[i]);
         for (int j=0; j<B[i]; j++) {
@@ -29,6 +29,7 @@ void print_arrays(int** &A, int* &B, int &rows) {
         }
         printf("\n");
     }
+    printf("\n");
 }
 
 void remove_row(int** &A, int* &B, int &rows, int row_remove) {
@@ -48,6 +49,26 @@ void remove_row(int** &A, int* &B, int &rows, int row_remove) {
     B = newB;
 }
 
+void find_path(int** &A, int* &B, int &rows, int n, int m, int c = -1) {
+    if (m > rows) return;  // check if row number exceed
+    if (n-1 > B[n-1]) return;  // check if columns number exceed
+    print_arrays(A, B, rows);
+
+    // Update c if it's first iteration
+    if (c == -1) c = A[m-1][n-1];
+    
+    // Self check
+    
+    if (A[m-1][n-1] == c) A[m-1][n-1] = 0;
+    // Look left, check if not already passed
+    if (n-1>0)
+       if (A[m-1][n-2] != 0) 
+           find_path(A, B, rows, n-1, m, c);
+    // Look right, check if not already passed
+    if (n<B[n])
+       if (A[m-1][n] != 0)     
+           find_path(A, B, rows, n+1, m, c);
+} 
 
 
 int main() {
@@ -59,10 +80,12 @@ int main() {
 
     // 1. Init arrays
     init_arrays(A, B, rows);
-    print_arrays(A, B, rows);
+    //print_arrays(A, B, rows);
           
     // 2. Main code      
-    remove_row(A, B, rows, 2);
+    //remove_row(A, B, rows, 2);
+    
+    find_path(A, B, rows, 4, 3);
     print_arrays(A, B, rows);
 
 
