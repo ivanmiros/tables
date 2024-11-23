@@ -51,32 +51,59 @@ void remove_row(int** &A, int* &B, int &rows, int row_remove) {
 
 void find_path(int** &A, int* &B, int &rows, int x, int y, int c = -1) {
     // A[y][x]  <- 'y' on first place
-
+    printf("Check: %d, %d\n", x, y);
     if (y > rows) return;    // check if row number exceed
     if (x > B[y-1]) return;  // check if columns number exceed
-    print_arrays(A, B, rows);
+
 
     // Save c if it's first iteration
     
     if (c == -1) c = A[y-1][x-1];
     
+    // Self check if already passed
+    if (A[y-1][x-1] == 0) {
+        printf("It's zerro, exit\n");
+        return;
+    }
+    
     // Self check set to zerro
     if (A[y-1][x-1] == c) { 
         A[y-1][x-1] = 0;
-    } else return;               // if self is not c -> exit
+        printf("Set self to zerro\n");
+    } else {
+        printf("It's not C, exit\n");
+        return;
+    }
     
+    print_arrays(A, B, rows);
+
     // Look left, skip if already zerro
     if (x-1>0)
-       if (A[y-1][x-2] != 0) 
-           find_path(A, B, rows, x-1, y, c);
+       if (A[y-1][x-2] != 0) {
+            printf("Go left\n");
+            find_path(A, B, rows, x-1, y, c);
+       }
 
-    // Look right, skip if already zerro
+    // Look right
     if (x<B[y-1])
-       if (A[y-1][x] != 0)     
-           find_path(A, B, rows, x+1, y, c);
+       if (A[y-1][x] != 0) {
+            printf("Go rigt\n");    
+            find_path(A, B, rows, x+1, y, c);
+       }
 
+    // Look up, check if cell is exist
+    if (y-1>0 && x-1<B[y-2])
+       if (A[y-2][x-1] != 0) {
+            printf("Go up\n");     
+            find_path(A, B, rows, x, y-1, c);
+       }
 
-
+    // Look down, check if cell is exist
+    if (y<rows && x-1<B[y])
+       if (A[y][x-1] != 0) {
+            printf("Go down\n");     
+            find_path(A, B, rows, x, y+1, c);
+       }
 
 } 
 
