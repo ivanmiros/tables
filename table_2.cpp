@@ -62,14 +62,14 @@ void find_path(int** &A, int* &B, int &rows, int x, int y, int c = -1) {
     
     // Self check if already passed
     if (A[y-1][x-1] == 0) {
-        printf("It's zerro, exit\n");
+        printf("It's zero, exit\n");
         return;
     }
     
-    // Self check set to zerro
+    // Self check set to zero
     if (A[y-1][x-1] == c) { 
         A[y-1][x-1] = 0;
-        printf("Set self to zerro\n");
+        printf("Set self to zero\n");
     } else {
         printf("It's not C, exit\n");
         return;
@@ -77,7 +77,7 @@ void find_path(int** &A, int* &B, int &rows, int x, int y, int c = -1) {
     
     print_arrays(A, B, rows);
 
-    // Look left, skip if already zerro
+    // Look left, skip if already zero
     if (x-1>0)
        if (A[y-1][x-2] != 0) {
             printf("Go left\n");
@@ -87,7 +87,7 @@ void find_path(int** &A, int* &B, int &rows, int x, int y, int c = -1) {
     // Look right
     if (x<B[y-1])
        if (A[y-1][x] != 0) {
-            printf("Go rigt\n");    
+            printf("Go right\n");    
             find_path(A, B, rows, x+1, y, c);
        }
 
