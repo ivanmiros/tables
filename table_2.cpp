@@ -8,12 +8,12 @@ void init_arrays(int** &A, int* &B, int &rows) {
     // Get number of rows
     scanf("%d", &rows);
     A = new int* [rows];  // Array with Data
-    B = new int [rows];   // Array with Column counts 
+    B = new int [rows];   // Array with size of rows (y) 
 
     // Get column size and fill it
     for (int i=0; i<rows; i++) {
-        scanf("%d", &B[i]);
-        A[i] = new int[B[i]];
+        scanf("%d", &B[i]);      // Get size of row (y)
+        A[i] = new int[B[i]];    // Create row with (x) elements 
         for (int j=0; j<B[i]; j++) {
            scanf("%d", &A[i][j]); 
         }
@@ -22,10 +22,10 @@ void init_arrays(int** &A, int* &B, int &rows) {
 
 void print_arrays(int** &A, int* &B, int &rows) {
     //printf("\nRows: %d\n", rows);
-    for (int i=0; i<rows; i++) {
-        printf("%d: ",B[i]);
-        for (int j=0; j<B[i]; j++) {
-            printf("%d ",A[i][j]);
+    for (int y=0; y<rows; y++) {
+        printf("%d: ",B[y]);
+        for (int x=0; x<B[y]; x++) {
+            printf("%d ",A[y][x]);
         }
         printf("\n");
     }
@@ -49,25 +49,35 @@ void remove_row(int** &A, int* &B, int &rows, int row_remove) {
     B = newB;
 }
 
-void find_path(int** &A, int* &B, int &rows, int n, int m, int c = -1) {
-    if (m > rows) return;  // check if row number exceed
-    if (n-1 > B[n-1]) return;  // check if columns number exceed
+void find_path(int** &A, int* &B, int &rows, int x, int y, int c = -1) {
+    // A[y][x]  <- 'y' on first place
+
+    if (y > rows) return;    // check if row number exceed
+    if (x > B[y-1]) return;  // check if columns number exceed
     print_arrays(A, B, rows);
 
-    // Update c if it's first iteration
-    if (c == -1) c = A[m-1][n-1];
+    // Save c if it's first iteration
     
-    // Self check
+    if (c == -1) c = A[y-1][x-1];
     
-    if (A[m-1][n-1] == c) A[m-1][n-1] = 0;
-    // Look left, check if not already passed
-    if (n-1>0)
-       if (A[m-1][n-2] != 0) 
-           find_path(A, B, rows, n-1, m, c);
-    // Look right, check if not already passed
-    if (n<B[n])
-       if (A[m-1][n] != 0)     
-           find_path(A, B, rows, n+1, m, c);
+    // Self check set to zerro
+    if (A[y-1][x-1] == c) { 
+        A[y-1][x-1] = 0;
+    } else return;               // if self is not c -> exit
+    
+    // Look left, skip if already zerro
+    if (x-1>0)
+       if (A[y-1][x-2] != 0) 
+           find_path(A, B, rows, x-1, y, c);
+
+    // Look right, skip if already zerro
+    if (x<B[y-1])
+       if (A[y-1][x] != 0)     
+           find_path(A, B, rows, x+1, y, c);
+
+
+
+
 } 
 
 
