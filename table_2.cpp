@@ -51,7 +51,7 @@ void remove_row(int** &A, int* &B, int &rows, int row_remove) {
 
 void find_path(int** &A, int* &B, int &rows, int x, int y, int c = -1) {
     // A[y][x]  <- 'y' on first place
-    printf("Check: %d, %d\n", x, y);
+    //printf("Check: %d, %d\n", x, y);
     if (y > rows) return;    // check if row number exceed
     if (x > B[y-1]) return;  // check if columns number exceed
 
@@ -62,50 +62,83 @@ void find_path(int** &A, int* &B, int &rows, int x, int y, int c = -1) {
     
     // Self check if already passed
     if (A[y-1][x-1] == 0) {
-        printf("It's zero, exit\n");
+        //printf("It's zero, exit\n");
         return;
     }
     
     // Self check set to zero
     if (A[y-1][x-1] == c) { 
         A[y-1][x-1] = 0;
-        printf("Set self to zero\n");
+        //printf("Set self to zero\n");
     } else {
-        printf("It's not C, exit\n");
+        //printf("It's not C, exit\n");
         return;
     }
     
-    print_arrays(A, B, rows);
+    //print_arrays(A, B, rows);
 
     // Look left, skip if already zero
     if (x-1>0)
        if (A[y-1][x-2] != 0) {
-            printf("Go left\n");
+            //printf("Go left\n");
             find_path(A, B, rows, x-1, y, c);
        }
 
     // Look right
     if (x<B[y-1])
        if (A[y-1][x] != 0) {
-            printf("Go right\n");    
+            //printf("Go right\n");    
             find_path(A, B, rows, x+1, y, c);
        }
 
     // Look up, check if cell is exist
     if (y-1>0 && x-1<B[y-2])
        if (A[y-2][x-1] != 0) {
-            printf("Go up\n");     
+            //printf("Go up\n");     
             find_path(A, B, rows, x, y-1, c);
        }
 
     // Look down, check if cell is exist
     if (y<rows && x-1<B[y])
        if (A[y][x-1] != 0) {
-            printf("Go down\n");     
+            //printf("Go down\n");     
             find_path(A, B, rows, x, y+1, c);
        }
 
 } 
+
+void remove_zero(int** &A, int* &B, int &rows) {
+    for (int y=0; y<rows; y++) {
+        // Check of row has at least 2 elements
+        if (B[y] > 1) {
+            bool found_zero = false;
+            int* duplicate = new int[B[y]];
+            int column = 0;
+            // Copy all numbers != 0
+            for (int x=0; x<B[y]; x++) {
+                if (A[y][x] != 0) {
+                    duplicate[column] = A[y][x];
+                    column ++;       // Count all non-zero numbers
+                } else {
+                    found_zero = true;
+                }
+            }
+            // If no zero found, clean duplicate array, exit
+            if (!found_zero) {
+                delete [] duplicate;
+                continue;
+            }
+            // Update A[y] array from duplicate with smaller size = column
+            delete [] A[y];
+            A[y] = new int[column];
+            for (int x=0; x<column; x++) {
+                A[y][x] = duplicate[x];
+            }
+            delete [] duplicate;
+            B[y] = column;
+        }
+    }
+}
 
 
 int main() {
@@ -117,13 +150,17 @@ int main() {
 
     // 1. Init arrays
     init_arrays(A, B, rows);
-    //print_arrays(A, B, rows);
+    print_arrays(A, B, rows);
           
     // 2. Main code      
     //remove_row(A, B, rows, 2);
     
     find_path(A, B, rows, 4, 3);
     print_arrays(A, B, rows);
+    
+    remove_zero(A, B, rows);
+    print_arrays(A, B, rows);
+
 
 
     // 9. Delete arrays
